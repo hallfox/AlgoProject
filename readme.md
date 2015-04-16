@@ -4,3 +4,4 @@
 
 Ideas:
 - Finding communities in a graph
+- A* search algorithm and comparison to Dijkstra
