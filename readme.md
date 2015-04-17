@@ -7,5 +7,22 @@ Ideas:
 - A* search algorithm and comparison to Dijkstra
 
 #Proposal
+Proposal:
 
-We want to implement the A\* search algorithm. We'll implement our own graph (possibly using both adj. list and matrix representations) and use the C++ heap functions to manage a priority queue. We are also planning to compare it with Dijkstra's algorithm, which would also have to be implemented. We'll evaluate it based on accuracy and time needed to find the optimal path. 
+We will implement and evaluate the A* shortest paths algorithm. This algorithm finds the shortest path between any two nodes in a graph and can operate faster than Dijkstra's algorithm. This is because A* is built on top of Dijkstra's algorithm with added heuristics.
+
+Because of this we will implement the following:
+- Adjacency List Graph (Sparse) (Taylor Foxhall)
+- Adjacency Matrix Graph (Dense) (Armond St. Juste)
+- Dikjstra's Algorithm for shortest paths (Alexander Strong)
+- A* Heuristic function and A* search (all)
+
+We will evaluate A* and how it compares with Dijkstra by measuring the run time to find the shortest path. The parameters we will test with include:
+- Dense adj matrix graph
+- Sparse adj matrix graph
+- Dense adj list graph
+- Sparse adj list graph
+- Mixed adj matrix graph
+- Mixed adj list graph
+
+Additionally as we learn more about the structure of A* we will look for certain optimizations to A* and test to see how the above parameters affect the runtime.
