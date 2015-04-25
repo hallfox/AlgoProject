@@ -13,7 +13,7 @@ class SparseGraph
         void insert(Vertex<T>);
 
     private:
-        std::vector<Vertex<T>> verts;
+        std::vector< Vertex<T> > verts;
 };
 
 #endif
