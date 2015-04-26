@@ -1,5 +1,4 @@
 CC=g++
-LDFLAGS=
 SRCDIR=src
 BUILDDIR=build
 TARGET=bin/astar
@@ -7,7 +6,7 @@ TARGET=bin/astar
 SRCEXT=cpp
 SOURCES=$(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS=$(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
-CFLAGS=-Wall -g
+CFLAGS=-Wall -g -std=c++11
 INC=-I include
 LIB=
  
