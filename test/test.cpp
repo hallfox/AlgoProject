@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
         {
             SparseGraph<std::string> sgraph;
             testSparseGraphInsert(sgraph);
+            std::cout << sgraph;
         }
     }
 }
