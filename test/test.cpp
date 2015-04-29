@@ -11,7 +11,6 @@ void testSparseGraphInsert(SparseGraph<std::string>& sgraph)
     v2->addEdge(v1, 250);
     sgraph.insert(v1);
     sgraph.insert(v2);   
-    std::cout << sgraph;
 }
 
 int main(int argc, char *argv[])
