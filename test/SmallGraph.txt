@@ -1,0 +1,6 @@
+5
+Alabama Arkansas 10 Alaska 4 Kentuky 1
+Arkansas Alabama 16 Connecticut 11
+Alaska Kentuky 14 Alabama 22
+Kentuky Arkansas 300 Connecticut 4
+Connecticut

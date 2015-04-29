@@ -26,3 +26,8 @@ We will evaluate A* and how it compares with Dijkstra by measuring the run time 
 - Mixed adj list graph
 
 Additionally as we learn more about the structure of A* we will look for certain optimizations to A* and test to see how the above parameters affect the runtime.
+
+#Test Case Format
+
+Test cases will begin with an integer *N*, the number of vertices on the first line. The following *N* lines will contain a value *V*, which will be the value of a vertex followed by pairs of values representing the edges going out from that vertex and the associated weight.
+
