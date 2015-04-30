@@ -20,10 +20,10 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 
 clean:
 	@echo " Cleaning..."
-	@echo " $(RM) -r $(BUILDDIR) $(TARGET)"; $(RM) -r $(BUILDDIR) $(TARGET)
+	@echo " $(RM) -r $(BUILDDIR) $(TARGET) bin/ggen"; $(RM) -r $(BUILDDIR) $(TARGET); $(RM) bin/ggen
 
-test:
-	$(CC) $(CFLAGS) test/test.cpp $(INC) $(LIB) -o bin/test
+tests:
+	$(CC) gen/RandomGraph.cpp gen/UF.cpp -o bin/ggen
 
 .PHONY: clean test
 
