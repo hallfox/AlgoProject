@@ -1,4 +1,5 @@
 #include <sstream>
+#include <fstream>
 
 #include "SparseGraph.h"
 
@@ -32,7 +33,8 @@ void SparseGraph::clear()
     for (typename std::vector<Vertex*>::iterator iter = verts.begin();
             iter != verts.end(); iter++)
     {
-        delete *iter;
+        delete (*iter);
+        *iter = nullptr;
     }
 }
 
@@ -41,6 +43,7 @@ Vertex* SparseGraph::find(const std::string& val)
     for (typename std::vector<Vertex*>::const_iterator iter = verts.begin();
             iter != verts.end(); iter++)
     {
+        //std::cout << *iter << "\n";
         if ((*iter)->getValue() == val)
         {
             return *iter;
@@ -48,6 +51,11 @@ Vertex* SparseGraph::find(const std::string& val)
     }
 
     return nullptr;
+}
+
+const std::vector<Vertex*>& SparseGraph::getVertices()
+{
+    return verts;
 }
 
 std::ostream& operator<<(std::ostream& os, const SparseGraph& g)
@@ -68,19 +76,25 @@ SparseGraph* ReadSparseGraph(const std::string& filename)
     // val edge weight
     // ...
     
+    std::ifstream file(filename);
+    
+    std::string size;
     int n;
-    std::cin >> n;
+    std::getline(file, size);
+    n = std::stoi(size);
 
-    SparseGraph *g = new SparseGraph(n);
+    SparseGraph *g = new SparseGraph();
 
     for (int i = 0; i < n; i++)
     {
         std::string s;
-        std::getline(std::cin, s);
+        std::getline(file, s);
         std::stringstream sstm(s);
 
         std::string vertName;
         sstm >> vertName;
+
+        //std::cout << "Reading in: " << vertName << "\n";
 
         // get a hold of the vertex
         Vertex *v = g->find(vertName);
@@ -89,6 +103,7 @@ SparseGraph* ReadSparseGraph(const std::string& filename)
         {
             v = new Vertex(vertName);
             g->insert(v);
+            //std::cout << "Added vertex: " << vertName << "\n";
         }
 
         std::string edgeName, weight;
@@ -107,6 +122,8 @@ SparseGraph* ReadSparseGraph(const std::string& filename)
             v->addEdge(edge, w);
         }
     }
+
+    file.close();
 
     return g;
 }
