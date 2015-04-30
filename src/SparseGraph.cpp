@@ -8,9 +8,45 @@ SparseGraph::SparseGraph()
     verts = std::vector<Vertex*>();
 }
 
-SparseGraph::SparseGraph(int n)
+SparseGraph::SparseGraph(std::ifstream& file)
 {
-    verts = std::vector<Vertex*>(n);
+    // READ FORMAT:
+    // num verts
+    // vert edge weight
+    // ...
+    int n;
+
+    file >> n;
+    verts = std::vector<Vertex*>(n, nullptr);
+
+    int from, to;
+    double weight;
+    while(true)
+    {
+        file >> from;
+        if (from == -1) break;
+        file >> to;
+        file >> weight;
+
+        // get a hold of the vertex
+        Vertex *v = find(from);
+        Vertex *e = find(to);
+
+        if (v == nullptr)
+        {
+            v = new Vertex(from);
+            verts[from] = v;
+        }
+        if (e == nullptr)
+        {
+            e = new Vertex(to);
+            verts[to] = e;
+        }
+
+        v->addEdge(e, weight);
+
+        std::string edgeName, weight;
+    }
 }
 
 SparseGraph::~SparseGraph()
@@ -23,7 +59,7 @@ void SparseGraph::insert(Vertex* v)
     verts.push_back(v);
 }
 
-void SparseGraph::insert(const std::string& val)
+void SparseGraph::insert(int val)
 {
     insert(new Vertex(val));
 }
@@ -38,19 +74,9 @@ void SparseGraph::clear()
     }
 }
 
-Vertex* SparseGraph::find(const std::string& val)
+Vertex* SparseGraph::find(int val)
 {
-    for (typename std::vector<Vertex*>::const_iterator iter = verts.begin();
-            iter != verts.end(); iter++)
-    {
-        //std::cout << *iter << "\n";
-        if ((*iter)->getValue() == val)
-        {
-            return *iter;
-        }
-    }
-
-    return nullptr;
+    return verts[val];
 }
 
 const std::vector<Vertex*>& SparseGraph::getVertices()
@@ -63,67 +89,10 @@ std::ostream& operator<<(std::ostream& os, const SparseGraph& g)
     for (typename std::vector<Vertex*>::const_iterator iter = g.verts.begin();
             iter != g.verts.end(); iter++)
     {
-        os << **iter << "\n";
+        if (*iter != nullptr)
+            os << **iter << "\n";
     }
 
     return os;
 }
 
-SparseGraph* ReadSparseGraph(const std::string& filename)
-{
-    // READ FORMAT:
-    // num verts
-    // val edge weight
-    // ...
-    
-    std::ifstream file(filename);
-    
-    std::string size;
-    int n;
-    std::getline(file, size);
-    n = std::stoi(size);
-
-    SparseGraph *g = new SparseGraph();
-
-    for (int i = 0; i < n; i++)
-    {
-        std::string s;
-        std::getline(file, s);
-        std::stringstream sstm(s);
-
-        std::string vertName;
-        sstm >> vertName;
-
-        //std::cout << "Reading in: " << vertName << "\n";
-
-        // get a hold of the vertex
-        Vertex *v = g->find(vertName);
-
-        if (v == nullptr)
-        {
-            v = new Vertex(vertName);
-            g->insert(v);
-            //std::cout << "Added vertex: " << vertName << "\n";
-        }
-
-        std::string edgeName, weight;
-        while ((sstm >> edgeName) && (sstm >> weight))
-        {
-            Vertex *edge = g->find(edgeName);
-
-            if (edge == nullptr)
-            {
-                edge = new Vertex(edgeName);
-                g->insert(edge);
-            }
-
-            int w = std::stoi(weight);
-
-            v->addEdge(edge, w);
-        }
-    }
-
-    file.close();
-
-    return g;
-}

@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <iostream>
+#include <fstream>
 
 #include "Vertex.h"
 
@@ -10,11 +11,11 @@ class SparseGraph
 {
     public:
         SparseGraph();
-        SparseGraph(int);
+        SparseGraph(std::ifstream&);
         ~SparseGraph();
         void insert(Vertex*);
-        void insert(const std::string&);
-        Vertex* find(const std::string& val);
+        void insert(int);
+        Vertex* find(int);
         const std::vector<Vertex*>& getVertices();
 
         friend std::ostream& operator<<(std::ostream&, const SparseGraph&);
@@ -22,7 +23,5 @@ class SparseGraph
         void clear();
         std::vector<Vertex*> verts;
 };
-
-SparseGraph* ReadSparseGraph(const std::string& filename);
 
 #endif

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "SparseGraph.h"
 
 int dijkstra(Vertex start, Vertex end) {
@@ -11,11 +12,11 @@ int aStar(Vertex start, Vertex end) {
 
 int main(int argc, char *argv[])
 {
-    // just a placeholder for now
-    std::cout << "Hello world!" << std::endl;
-    SparseGraph *sgraph = ReadSparseGraph("test/SmallGraph.txt");
-    std::cout << *sgraph;
-    delete sgraph;
+    std::ifstream file("test/TestGraph1.txt");
+    SparseGraph sgraph(file);
+    file.close();
+
+    std::cout << sgraph;
 
     return 0;
 }

@@ -2,21 +2,21 @@
 
 Vertex::Vertex()
 {
-    val = "";
+    val = 0;
 }
 
-Vertex::Vertex(std::string ele)
+Vertex::Vertex(int v)
 {
-    val = ele;
+    val = v;
 }
 
 Vertex::Vertex(const Vertex& v)
 {
     edges = std::list<Edge>(v.edges);
-    val = std::string(v.val);
+    val = v.val;
 }
 
-void Vertex::addEdge(Vertex* v, int weight)
+void Vertex::addEdge(Vertex* v, double weight)
 {
     edges.push_back(std::make_pair(v, weight));
 }
@@ -26,7 +26,7 @@ void Vertex::addEdge(Edge e)
     edges.push_back(e);
 }
 
-std::string Vertex::getValue()
+int Vertex::getValue()
 {
     return val;
 }
