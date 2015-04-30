@@ -30,3 +30,9 @@ void Vertex<T>::addEdge(Edge<T> e)
 {
     edges.push_back(e);
 }
+
+template <class T>
+T Vertex<T>::getValue()
+{
+    return val;
+}

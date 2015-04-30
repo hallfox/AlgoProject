@@ -20,6 +20,7 @@ class Vertex
         Vertex(const Vertex<T>&);
         void addEdge(Vertex<T>*, int);
         void addEdge(Edge<T>);
+        T getValue();
 
         // inline because templating
         friend std::ostream& operator<<(std::ostream& os, const Vertex<T>& v)
