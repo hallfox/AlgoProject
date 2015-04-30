@@ -1,13 +1,12 @@
 #include <iostream>
 #include "SparseGraph.h"
-#include "Graph.h"
 
-int dijkstra(Vertex start, Vertex end) {
-    
+int dijkstra(Vertex<std::string> start, Vertex<std::string> end) {
+    return 0;    
 }
 
-int aStar(Vertex start, Vertex end) {
-    
+int aStar(Vertex<std::string> start, Vertex<std::string> end) {
+    return 0; 
 }
 
 int main(int argc, char *argv[])

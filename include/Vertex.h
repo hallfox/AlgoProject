@@ -5,40 +5,25 @@
 #include <utility>
 #include <iostream>
 
-template <class T> class Vertex;
+class Vertex;
 
 // an edge, which points to a vertex and has a weight
-template <class T>
-using Edge = std::pair<Vertex<T>*, int>;
+typedef std::pair<Vertex*, int> Edge;
 
-template <class T>
 class Vertex
 {
     public:
         Vertex();
-        Vertex(T);
-        Vertex(const Vertex<T>&);
-        void addEdge(Vertex<T>*, int);
-        void addEdge(Edge<T>);
-        T getValue();
+        Vertex(std::string);
+        Vertex(const Vertex&);
+        void addEdge(Vertex*, int);
+        void addEdge(Edge);
+        std::string getValue();
 
-        // inline because templating
-        friend std::ostream& operator<<(std::ostream& os, const Vertex<T>& v)
-        {
-            // Vertex (val): <Edges(val, weight)>
-            os << "Vertex (" << v.val << "): ";
-
-            for (typename std::list<Edge<T> >::const_iterator iter = v.edges.begin();
-                iter != v.edges.end(); iter++)
-            {
-                os << "Edge<" << iter->first << ", " << iter->second << "> ";
-            }
-
-            return os;
-        }
+        friend std::ostream& operator<<(std::ostream&, const Vertex&);
     private:
-        std::list<Edge<T> > edges;
-        T val;
+        std::list<Edge> edges;
+        std::string val;
 };
 
 #endif

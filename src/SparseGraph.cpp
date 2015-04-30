@@ -2,50 +2,43 @@
 
 #include "SparseGraph.h"
 
-template <class T>
-SparseGraph<T>::SparseGraph() 
+SparseGraph::SparseGraph() 
 {
-    verts = std::vector<Vertex<T>* >();
+    verts = std::vector<Vertex*>();
 }
 
-template <class T>
-SparseGraph<T>::SparseGraph(int n)
+SparseGraph::SparseGraph(int n)
 {
-    verts = std::vector<Vertex<T>* >(n);
+    verts = std::vector<Vertex*>(n);
 }
 
-template <class T>
-SparseGraph<T>::~SparseGraph()
+SparseGraph::~SparseGraph()
 {
     clear();
 }
 
-template <class T>
-void SparseGraph<T>::insert(Vertex<T>* v)
+void SparseGraph::insert(Vertex* v)
 {
     verts.push_back(v);
 }
 
-template <class T>
-void SparseGraph<T>::insert(const T& val)
+void SparseGraph::insert(const std::string& val)
 {
-    insert(new Vertex<T>(val));
+    insert(new Vertex(val));
 }
 
-template <class T>
-void SparseGraph<T>::clear()
+void SparseGraph::clear()
 {
-    for (typename std::vector<Vertex<T>* >::iterator iter = verts.begin();
+    for (typename std::vector<Vertex*>::iterator iter = verts.begin();
             iter != verts.end(); iter++)
     {
         delete *iter;
     }
 }
 
-template <class T>
-Vertex<T>* SparseGraph<T>::find(const T& val)
+Vertex* SparseGraph::find(const std::string& val)
 {
-    for (typename std::vector<Vertex<T>* >::const_iterator iter = verts.begin();
+    for (typename std::vector<Vertex*>::const_iterator iter = verts.begin();
             iter != verts.end(); iter++)
     {
         if ((*iter)->getValue() == val)
@@ -57,10 +50,9 @@ Vertex<T>* SparseGraph<T>::find(const T& val)
     return nullptr;
 }
 
-template <class T>
-std::ostream& operator<<(std::ostream& os, const SparseGraph<T>& g)
+std::ostream& operator<<(std::ostream& os, const SparseGraph& g)
 {
-    for (typename std::vector<Vertex<T> >::const_iterator iter = g.verts.begin();
+    for (typename std::vector<Vertex*>::const_iterator iter = g.verts.begin();
             iter != g.verts.end(); iter++)
     {
         os << **iter << "\n";
@@ -69,7 +61,7 @@ std::ostream& operator<<(std::ostream& os, const SparseGraph<T>& g)
     return os;
 }
 
-SparseGraph<std::string>* ReadSparseGraph(const std::string& filename)
+SparseGraph* ReadSparseGraph(const std::string& filename)
 {
     // READ FORMAT:
     // num verts
@@ -79,7 +71,7 @@ SparseGraph<std::string>* ReadSparseGraph(const std::string& filename)
     int n;
     std::cin >> n;
 
-    SparseGraph<std::string> *g = new SparseGraph<std::string>(n);
+    SparseGraph *g = new SparseGraph(n);
 
     for (int i = 0; i < n; i++)
     {
@@ -91,22 +83,22 @@ SparseGraph<std::string>* ReadSparseGraph(const std::string& filename)
         sstm >> vertName;
 
         // get a hold of the vertex
-        Vertex<std::string> *v = g->find(vertName);
+        Vertex *v = g->find(vertName);
 
         if (v == nullptr)
         {
-            v = new Vertex<std::string>(vertName);
+            v = new Vertex(vertName);
             g->insert(v);
         }
 
         std::string edgeName, weight;
         while ((sstm >> edgeName) && (sstm >> weight))
         {
-            Vertex<std::string> *edge = g->find(edgeName);
+            Vertex *edge = g->find(edgeName);
 
             if (edge == nullptr)
             {
-                edge = new Vertex<std::string>(edgeName);
+                edge = new Vertex(edgeName);
                 g->insert(edge);
             }
 
