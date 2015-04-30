@@ -25,5 +25,5 @@ clean:
 test:
 	$(CC) $(CFLAGS) test/test.cpp $(INC) $(LIB) -o bin/test
 
-.PHONY: clean
+.PHONY: clean test
 

@@ -39,7 +39,7 @@ std::ostream& operator<<(std::ostream& os, const Vertex& v)
     for (typename std::list<Edge>::const_iterator iter = v.edges.begin();
         iter != v.edges.end(); iter++)
     {
-        os << "Edge<" << iter->first << ", " << iter->second << "> ";
+        os << "Edge<" << iter->first->getValue() << ", " << iter->second << "> ";
     }
 
     return os;
