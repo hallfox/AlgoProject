@@ -1,38 +1,46 @@
 #include "Vertex.h"
 
-template <class T>
-Vertex<T>::Vertex()
+Vertex::Vertex()
 {
-    val = T();
+    val = "";
 }
 
-template <class T>
-Vertex<T>::Vertex(T ele)
+Vertex::Vertex(std::string ele)
 {
     val = ele;
 }
 
-template <class T>
-Vertex<T>::Vertex(const Vertex<T>& v)
+Vertex::Vertex(const Vertex& v)
 {
-    edges = std::list<Edge<T> >(v.edges);
-    val = T(v.val);
+    edges = std::list<Edge>(v.edges);
+    val = std::string(v.val);
 }
 
-template <class T>
-void Vertex<T>::addEdge(Vertex<T>* v, int weight)
+void Vertex::addEdge(Vertex* v, int weight)
 {
     edges.push_back(std::make_pair(v, weight));
 }
 
-template <class T>
-void Vertex<T>::addEdge(Edge<T> e)
+void Vertex::addEdge(Edge e)
 {
     edges.push_back(e);
 }
 
-template <class T>
-T Vertex<T>::getValue()
+std::string Vertex::getValue()
 {
     return val;
+}
+
+std::ostream& operator<<(std::ostream& os, const Vertex& v)
+{
+    // Vertex (val): <Edges(val, weight)>
+    os << "Vertex (" << v.val << "): ";
+
+    for (typename std::list<Edge>::const_iterator iter = v.edges.begin();
+        iter != v.edges.end(); iter++)
+    {
+        os << "Edge<" << iter->first << ", " << iter->second << "> ";
+    }
+
+    return os;
 }

@@ -6,23 +6,22 @@
 
 #include "Vertex.h"
 
-template <class T>
 class SparseGraph
 {
     public:
         SparseGraph();
         SparseGraph(int);
         ~SparseGraph();
-        void insert(Vertex<T>*);
-        void insert(const T&);
-        Vertex<T>* find(const T& val);
+        void insert(Vertex*);
+        void insert(const std::string&);
+        Vertex* find(const std::string& val);
 
-        friend std::ostream& operator<<(std::ostream&, const SparseGraph<T>&);
+        friend std::ostream& operator<<(std::ostream&, const SparseGraph&);
     private:
         void clear();
-        std::vector<Vertex<T>* > verts;
+        std::vector<Vertex*> verts;
 };
 
-SparseGraph<std::string>* ReadSparseGraph(const std::string& filename);
+SparseGraph* ReadSparseGraph(const std::string& filename);
 
 #endif
