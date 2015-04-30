@@ -53,6 +53,11 @@ Vertex* SparseGraph::find(const std::string& val)
     return nullptr;
 }
 
+const std::vector<Vertex*>& SparseGraph::getVertices()
+{
+    return verts;
+}
+
 std::ostream& operator<<(std::ostream& os, const SparseGraph& g)
 {
     for (typename std::vector<Vertex*>::const_iterator iter = g.verts.begin();
