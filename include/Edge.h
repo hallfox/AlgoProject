@@ -5,6 +5,11 @@ typedef struct {
   int start;
   int end;
   double weight;
+  Edge(int s, int e, int w = 0) {
+    start = s;
+    end = e;
+    weight = w;
+  }
   bool operator<(const Edge &other) {
     return weight < other.weight;
   }
