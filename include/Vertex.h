@@ -5,11 +5,10 @@
 #include <utility>
 #include <iostream>
 
-// an edge, which points to a vertex and has a weight
+#include "Edge.h"
 
 class Vertex
 {
-    typedef std::pair<int, double> Edge;
     public:
         Vertex();
         Vertex(int);
