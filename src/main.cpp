@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "SparseGraph.h"
+#include "Graph.h"
 
 int dijkstra(Vertex start, Vertex end) {
   std::list<Edge> edges = start.getEdges();
