@@ -1,4 +1,4 @@
-OD#ifndef __SPARSE_GRAPH_H
+#ifndef __SPARSE_GRAPH_H
 #define __SPARSE_GRAPH_H
 
 #include <vector>
