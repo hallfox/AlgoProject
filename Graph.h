@@ -20,7 +20,6 @@ double weight;
 };
 
 //This class will be used to create a graph library.   
-enum Type {DIRECTED,UNDIRECTED};
 enum Status{NOT_VISITED,VISITED};
 
 class Graph{
@@ -31,7 +30,6 @@ class Graph{
 		std::vector<int> vertices;
 		std::vector<Edge> edges;
 		double **adjMatrix; //2d array of bools
-		Type direction;
 		//Put your private methods here
         void followComponent(int v, std::vector<int> &accountedVertices);
         void DFTHelper(int source , Status * visited, std::queue<int> &traverseNodes);

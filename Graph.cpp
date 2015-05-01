@@ -29,13 +29,6 @@ Graph::~Graph(){
 void Graph::readFromFile(std::string file){
     ifstream inputFile(file);
     string line;
-    string word;
-    getline(inputFile,line);
-    if (line == "directed") {
-        direction = DIRECTED;
-    }else{
-        direction = UNDIRECTED;
-    }
     getline(inputFile,line);
     numVertices = stoi(line);
     adjMatrix = new double*[numVertices+1];
@@ -97,12 +90,6 @@ int Graph::searchVector(vector<int> vec, int value){
 //Write A Graph To A File
 void Graph::writeToFile(std::string file){
     ofstream outf(file);
-    if(direction == DIRECTED){
-        outf << "directed" << "\n" << endl;
-    }
-    else{
-        outf << "undirected" << "\n" << endl;
-    }
     outf << to_string(numVertices) << "\n" << endl;
     outf << to_string(numEdges) << "\n" << endl;
     if(!edges.empty()){
@@ -129,11 +116,8 @@ bool Graph::empty(){
 //Add Edge
 void Graph::addEdge(int v1, int v2, double weight){
     Edge e = Edge(v1,v2,weight);
-    Edge e1 = Edge(v2,v1,weight);
+   // Edge e1 = Edge(v2,v1,weight);
     edges.push_back(e);
-    if(direction == UNDIRECTED){
-        edges.push_back(e1);
-    }
     int pos1 = searchVector(vertices, v1);
    // cout <<"Vector "<< v1 <<" pos 1" << pos1 << endl; DEBUG
     int pos2 = searchVector(vertices, v2);
@@ -142,9 +126,7 @@ void Graph::addEdge(int v1, int v2, double weight){
         throw std::invalid_argument("One of the vertices in the edge don't exist!");
     }
     adjMatrix[v1][v2] = weight;
-    if (direction == UNDIRECTED) {
-        adjMatrix[v2][v1] = weight;
-    }
+
 }
 
 //Add Vertex
@@ -208,16 +190,9 @@ void Graph::followComponent(int v, vector<int>& accountedVertices){
 //Tree Check
 bool Graph::tree(){
     bool retVal = false;
-    if (direction == UNDIRECTED) {
-        if(edges.size()/2 == vertices.size() - 1){ //The conditions for a graph to be a tree
-            retVal = true;
-        }
-    }else // need a check for directed graphs as well
-           {
-               if(edges.size()/2 == vertices.size() - 1){ //The conditions for a graph to be a tree
+       if(edges.size()/2 == vertices.size() - 1){ //The conditions for a graph to be a tree
                    retVal = true;
                }
-           }
     return retVal;
 }
 
