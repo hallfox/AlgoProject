@@ -16,9 +16,9 @@ Vertex::Vertex(const Vertex& v)
     val = v.val;
 }
 
-void Vertex::addEdge(Vertex* v, double weight)
+void Vertex::addEdge(Vertex* v, double w)
 {
-    edges.push_back(std::make_pair(v, weight));
+    edges.push_back((Edge) {start: val, end: v.val, weight: });
 }
 
 void Vertex::addEdge(Edge e)
