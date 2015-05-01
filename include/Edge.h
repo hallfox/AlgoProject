@@ -5,7 +5,7 @@ typedef struct Edge{
   int start;
   int end;
   double weight;
-  Edge(int s, int e, int w = 0) {
+  Edge(int s, int e, double w = 0) {
     start = s;
     end = e;
     weight = w;
