@@ -19,7 +19,6 @@ class Vertex
         const std::list<Edge>& getEdges();
         friend std::ostream& operator<<(std::ostream&, const Vertex&);
     private:
-        //typedef std::pair<Vertex*, double> Edge;
         std::list<Edge> edges;
         int val;
 };

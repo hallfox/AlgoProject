@@ -18,7 +18,7 @@ Vertex::Vertex(const Vertex& v)
 
 void Vertex::addEdge(Vertex* v, double w)
 {
-    edges.push_back((Edge) {start: val, end: v.val, weight: });
+    edges.push_back(Edge(this->val, v->val, w));
 }
 
 void Vertex::addEdge(Edge e)
@@ -31,7 +31,7 @@ int Vertex::getValue()
     return val;
 }
 
-std::list<Edge> Vertex::getEdges() {
+const std::list<Edge>& Vertex::getEdges() {
   return edges;
 }
 
@@ -43,7 +43,7 @@ std::ostream& operator<<(std::ostream& os, const Vertex& v)
     for (typename std::list<Edge>::const_iterator iter = v.edges.begin();
         iter != v.edges.end(); iter++)
     {
-        os << "Edge<" << iter->first->getValue() << ", " << iter->second << "> ";
+        os << "Edge<" << iter->end << ", " << iter->weight << "> ";
     }
 
     return os;
