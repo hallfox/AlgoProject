@@ -116,7 +116,7 @@ bool Graph::empty(){
 //Add Edge
 void Graph::addEdge(int v1, int v2, double weight){
     Edge e = Edge(v1,v2,weight);
-   // Edge e1 = Edge(v2,v1,weight);
+    Edge e1 = Edge(v2,v1,weight);
     edges.push_back(e);
     int pos1 = searchVector(vertices, v1);
    // cout <<"Vector "<< v1 <<" pos 1" << pos1 << endl; DEBUG
@@ -126,7 +126,6 @@ void Graph::addEdge(int v1, int v2, double weight){
         throw std::invalid_argument("One of the vertices in the edge don't exist!");
     }
     adjMatrix[v1][v2] = weight;
-
 }
 
 //Add Vertex
@@ -190,9 +189,9 @@ void Graph::followComponent(int v, vector<int>& accountedVertices){
 //Tree Check
 bool Graph::tree(){
     bool retVal = false;
-       if(edges.size()/2 == vertices.size() - 1){ //The conditions for a graph to be a tree
-                   retVal = true;
-               }
+    if(edges.size()/2 == vertices.size() - 1){ //The conditions for a graph to be a tree
+        retVal = true;
+    }
     return retVal;
 }
 
