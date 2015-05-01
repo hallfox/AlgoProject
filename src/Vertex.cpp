@@ -31,6 +31,10 @@ int Vertex::getValue()
     return val;
 }
 
+std::list<Edge> Vertex::getEdges() {
+  return edges;
+}
+
 std::ostream& operator<<(std::ostream& os, const Vertex& v)
 {
     // Vertex (val): <Edges(val, weight)>

@@ -19,7 +19,7 @@ class Vertex
         void addEdge(Vertex*, double);
         void addEdge(Edge);
         int getValue();
-
+	std::list<Edge> getEdges();
         friend std::ostream& operator<<(std::ostream&, const Vertex&);
     private:
         std::list<Edge> edges;
