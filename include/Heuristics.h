@@ -5,6 +5,7 @@
 #include <cstdlib>
 
 int hDijkstra() { return 0; }
+int hManhattan() { return (x1 - x2) + (y1 - y2); }
 
 int hAStarGrid(int start, int end, int width, int height) { //only to be used on grid-shaped graphs
   int startx = start%width;
