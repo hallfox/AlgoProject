@@ -5,7 +5,6 @@
 #include <cstdlib>
 
 int hDijkstra() { return 0; }
-int hManhattan() { return (x1 - x2) + (y1 - y2); }
 
 int hAStarGrid(int start, int end, int width, int height) { //only to be used on grid-shaped graphs
   int startx = start%width;
@@ -20,7 +19,7 @@ int hManhattanReal(int start, int end, int width, int height) {
   int starty = height/start;
   int endx = end%width;
   int endy = height/end;
-  return abs(endx - startx) + abs(endy - starty)
+  return abs(endx - startx) + abs(endy - starty);
 }
 
 int hAStarRand() { //may not run as accurately as other heuristics
