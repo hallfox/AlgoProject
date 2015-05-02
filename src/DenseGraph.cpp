@@ -1,7 +1,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include "Graph.h"
+#include "DenseGraph.h"
 #include <stdexcept>
 #include <queue>
 #include <functional>
@@ -13,10 +13,10 @@ static const int PLACEHOLDER = 0;
 using namespace std;
 
 //Construct a graph
-Graph::Graph() : numVertices(0), numEdges(0), adjMatrix(nullptr) {}
+DenseGraph::DenseGraph() : numVertices(0), numEdges(0), adjMatrix(nullptr) {}
 
 //Delete
-Graph::~Graph(){
+DenseGraph::~DenseGraph(){
     if(adjMatrix != nullptr){
         for(int i = 0; i < numVertices; ++i){
             delete adjMatrix[i];
@@ -25,8 +25,8 @@ Graph::~Graph(){
     }
 }
 
-//Read A Graph From A File
-void Graph::readFromFile(std::string file){
+//Read A DenseGraph From A File
+void DenseGraph::readFromFile(std::string file){
     ifstream inputFile(file);
     string line;
     getline(inputFile,line);
@@ -62,14 +62,14 @@ void Graph::readFromFile(std::string file){
     
 }
 
-void Graph::printVertices(){
+void DenseGraph::printVertices(){
     cout << "Printing vertices" << endl;
     for(unsigned i = 0; i < vertices.size();++i){
         cout << vertices.at(i) << endl;
     }
 }
 
-void Graph::printEdges(){
+void DenseGraph::printEdges(){
     cout << "Printing edges" << endl;
     for(unsigned i = 0; i < edges.size(); ++i){
         cout << "(" << edges.at(i).vect1 << " ," << edges.at(i).vect2 << ")" << endl;
@@ -77,7 +77,7 @@ void Graph::printEdges(){
 }
 
 //Searches vector vec for a value. Returns the first index at which value appears in vector vec. If not found, -1 is returned.
-int Graph::searchVector(vector<int> vec, int value){
+int DenseGraph::searchVector(vector<int> vec, int value){
     for(unsigned i = 0; i < vec.size(); ++i){
         if(vec.at(i) == value){
             return i;
@@ -87,8 +87,8 @@ int Graph::searchVector(vector<int> vec, int value){
     return -1;
 }
 
-//Write A Graph To A File
-void Graph::writeToFile(std::string file){
+//Write A DenseGraph To A File
+void DenseGraph::writeToFile(std::string file){
     ofstream outf(file);
     outf << to_string(numVertices) << "\n" << endl;
     outf << to_string(numEdges) << "\n" << endl;
@@ -105,7 +105,7 @@ void Graph::writeToFile(std::string file){
 }
 
 //Empty
-bool Graph::empty(){
+bool DenseGraph::empty(){
     bool retVal = false;
     if(vertices.empty()){
         retVal = true;
@@ -114,7 +114,7 @@ bool Graph::empty(){
 }
 
 //Add Edge
-void Graph::addEdge(int v1, int v2, double weight){
+void DenseGraph::addEdge(int v1, int v2, double weight){
     Edge e = Edge(v1,v2,weight);
     Edge e1 = Edge(v2,v1,weight);
     edges.push_back(e);
@@ -129,7 +129,7 @@ void Graph::addEdge(int v1, int v2, double weight){
 }
 
 //Add Vertex
-void Graph::addVertex(){
+void DenseGraph::addVertex(){
     numVertices++;
     vertices.push_back(vertices.size() + 1);
     double** tempMatrix = new double*[numVertices];
@@ -155,7 +155,7 @@ void Graph::addVertex(){
 }
 
 //Count Connected Components
-int Graph::numConnectedComponents(){
+int DenseGraph::numConnectedComponents(){
     int i, retVal = 0;
     vector<int> accountedVertices;
     accountedVertices.push_back(PLACEHOLDER);
@@ -174,7 +174,7 @@ int Graph::numConnectedComponents(){
 }
 
 //Helper Method for numConnectedComponents
-void Graph::followComponent(int v, vector<int>& accountedVertices){
+void DenseGraph::followComponent(int v, vector<int>& accountedVertices){
     int i;
     for(i = 1; i <= numVertices; ++i){
         if((adjMatrix[v][i] != 0 || adjMatrix[i][v] != 0) && searchVector(accountedVertices, i) < 0){ //If v connects to vertex i and i hasnt been accounted for yet
@@ -187,7 +187,7 @@ void Graph::followComponent(int v, vector<int>& accountedVertices){
 }
 
 //Tree Check
-bool Graph::tree(){
+bool DenseGraph::tree(){
     bool retVal = false;
     if(edges.size()/2 == vertices.size() - 1){ //The conditions for a graph to be a tree
         retVal = true;
@@ -196,7 +196,7 @@ bool Graph::tree(){
 }
 
 //Depth First Traverse
-void Graph::DFT(int source, string file){
+void DenseGraph::DFT(int source, string file){
     ofstream outf(file);
     Status visited[numVertices+1]; //Keeps track of the visited vertices
     int i;
@@ -216,7 +216,7 @@ void Graph::DFT(int source, string file){
 }
 
 //Helper for DFT
-void Graph::DFTHelper(int source, Status* visited, queue<int>& traversedNodes){
+void DenseGraph::DFTHelper(int source, Status* visited, queue<int>& traversedNodes){
     int i;
     visited[source] = VISITED;
     for(i = 1; i <= numVertices; ++i){
@@ -229,7 +229,7 @@ void Graph::DFTHelper(int source, Status* visited, queue<int>& traversedNodes){
 }
 
 //Breadth First Traverse
-void Graph::BFT(int source, string file){
+void DenseGraph::BFT(int source, string file){
     ofstream outf(file);
     //mark verticies as not visited
     Status visited[numVertices+1];
@@ -255,7 +255,7 @@ void Graph::BFT(int source, string file){
 	}
 }
 //Closeness                                                                                                                                                          
-int Graph::closeness(int v1, int v2){
+int DenseGraph::closeness(int v1, int v2){
     int one = closenessHelp(v1,v2);
     int two = closenessHelp(v2, v1);
     if (one == -1) {
@@ -270,7 +270,7 @@ int Graph::closeness(int v1, int v2){
 }
 
 //* Partition
-bool Graph::partitionable(){
+bool DenseGraph::partitionable(){
     vector<int> red;
     vector<int> blue;
     unsigned i;
@@ -326,7 +326,7 @@ bool Graph::partitionable(){
 }
 
 //* MST                                                                                                                                                              
-bool Graph::MST(std::string file){
+bool DenseGraph::MST(std::string file){
     ofstream outf(file);
     if (!outf.is_open()) {
         return false;
@@ -346,7 +346,7 @@ bool Graph::MST(std::string file){
 }
 
 //* Step Away                                                                                                                                                        
-void Graph::stepAway(int source, int closeness, std::string file){
+void DenseGraph::stepAway(int source, int closeness, std::string file){
     ofstream outf(file);
     int c = 0;
     for (int i=1;i<=numVertices; ++i) {
@@ -357,7 +357,7 @@ void Graph::stepAway(int source, int closeness, std::string file){
     }
 }
 // Helper function for closeness
-int Graph::closenessHelp(int v1, int v2){
+int DenseGraph::closenessHelp(int v1, int v2){
     int dis=0;
     if (v1 == v2) {
         return 0;
@@ -390,7 +390,7 @@ int Graph::closenessHelp(int v1, int v2){
     return dis;
 }
 // Helper function for mst
-void Graph::prim(int source, ofstream& file, Status visited[]){
+void DenseGraph::prim(int source, ofstream& file, Status visited[]){
     
     
     visited[source] = VISITED;

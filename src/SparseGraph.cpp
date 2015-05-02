@@ -79,9 +79,9 @@ Vertex* SparseGraph::find(int val)
     return verts[val];
 }
 
-const std::vector<Vertex*>& SparseGraph::getVertices()
+int SparseGraph::getVertSize()
 {
-    return verts;
+    return verts.size();
 }
 
 std::ostream& operator<<(std::ostream& os, const SparseGraph& g)

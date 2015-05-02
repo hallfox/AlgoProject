@@ -2,8 +2,11 @@
 #include <fstream>
 #include <algorithm>
 #include <queue>
+#include <vector>
+#include <list>
+
 #include "SparseGraph.h"
-#include "Graph.h"
+#include "DenseGraph.h"
 #include "Heuristics.h"
 
 typedef std::pair<int, double> VertexKey;
@@ -14,12 +17,8 @@ struct minComp {
     }
 };
 
-void reheap(std::vector<VertexKey> heap)
-{
-    std::make_heap(heap.begin(), heap.end(), minComp);
-}
-
-int aStar(Vertex start, Vertex end) {
+int aStar(SparseGraph graph, int start, int end) {
+  int n = graph.getVertSize();
   // nodes that have been visited
   std::vector<bool> visited(n, false);
   // keeps track of shortest distance
@@ -32,7 +31,8 @@ int aStar(Vertex start, Vertex end) {
   // the priority queue
   // A VertexKey is a pair<int, double> where int is the vertex id 
   // and double is the estimated distance
-  std::priority_queue<VertexKey, minComp> toVisit;
+  std::priority_queue<VertexKey, std::vector<VertexKey>, minComp> toVisit;
+  toVisit.push(std::make_pair(start, 0.0));
 
   // NOTE: since C++ doesn't support a decrease key op and we simply
   // can't be bothered to write our own pqueue, we take the strategy
@@ -59,13 +59,14 @@ int aStar(Vertex start, Vertex end) {
     // did we find the destination?
     if (currVert == end)
     {
-        return path();
+        // TODO: Reconstruct path
+        return 0;
     }
 
     // mark processed and iterate over the vertex's neighbors
     visited[currVert] = true;
-    std::vector<Edge> neighbors = graph.find(currVert)->getEdges();
-    for (std::vector<Edge>::const_iterator iter = neighbors.begin();
+    const std::list<Edge> neighbors = graph.find(currVert)->getEdges();
+    for (std::list<Edge>::const_iterator iter = neighbors.begin();
             iter != neighbors.end(); iter++)
     {
         int vNext = iter->end;
@@ -77,11 +78,11 @@ int aStar(Vertex start, Vertex end) {
         // check if we should relax
         if (!visited[vNext] || tDist < fromDistance[vNext])
         {
-            backPath[vNext] = currVect;
+            backPath[vNext] = currVert;
             fromDistance[vNext] = tDist;
             // !IMPORTANT: this uses our approximation to head toward the destination
             // h*() must never overestimate the actual distance, or the algorithm may be wrong 
-            estDistance[vNext] = tDist + hDist(vNext, end);
+            estDistance[vNext] = tDist + hDijkstra();
             if (!visited[vNext])
             {
                 toVisit.push(std::make_pair(vNext, estDistance[vNext]));

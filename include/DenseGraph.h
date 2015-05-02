@@ -22,7 +22,7 @@ double weight;
 //This class will be used to create a graph library.   
 enum Status{NOT_VISITED,VISITED};
 
-class Graph{
+class DenseGraph{
 	private:
 		//Put your private data members here
 		int numVertices;
@@ -37,12 +37,12 @@ class Graph{
         void prim(int source, std::ofstream& file, Status visited[]);
 	public:
 		//Construct
-		Graph();
+		DenseGraph();
 		//Delete
-		~Graph();
-		//Read A Graph From A File
+		~DenseGraph();
+		//Read A DenseGraph From A File
 		void readFromFile(std::string file);
-		//Write A Graph To A File
+		//Write A DenseGraph To A File
 		void writeToFile(std::string file);
 		//Print vertices
 		void printVertices();

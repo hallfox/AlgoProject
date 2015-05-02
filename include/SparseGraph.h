@@ -16,7 +16,7 @@ class SparseGraph
         void insert(Vertex*);
         void insert(int);
         Vertex* find(int);
-        const std::vector<Vertex*>& getVertices();
+        int getVertSize();
 
         friend std::ostream& operator<<(std::ostream&, const SparseGraph&);
     private:
