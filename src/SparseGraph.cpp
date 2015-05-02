@@ -1,4 +1,3 @@
-#include <sstream>
 #include <fstream>
 
 #include "SparseGraph.h"
@@ -82,6 +81,11 @@ Vertex* SparseGraph::find(int val)
 int SparseGraph::getVertSize()
 {
     return verts.size();
+}
+
+const std::list<Edge> SparseGraph::getEdges(int v)
+{
+    return verts[v]->getEdges();
 }
 
 std::ostream& operator<<(std::ostream& os, const SparseGraph& g)

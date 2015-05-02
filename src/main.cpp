@@ -4,7 +4,9 @@
 #include <queue>
 #include <vector>
 #include <list>
+#include <utility>
 
+#include "Graph.h"
 #include "SparseGraph.h"
 #include "DenseGraph.h"
 #include "Heuristics.h"
@@ -17,7 +19,7 @@ struct minComp {
     }
 };
 
-int aStar(SparseGraph graph, int start, int end) {
+int aStar(Graph &graph, int start, int end) {
   int n = graph.getVertSize();
   // nodes that have been visited
   std::vector<bool> visited(n, false);
@@ -65,7 +67,7 @@ int aStar(SparseGraph graph, int start, int end) {
 
     // mark processed and iterate over the vertex's neighbors
     visited[currVert] = true;
-    const std::list<Edge> neighbors = graph.find(currVert)->getEdges();
+    const std::list<Edge> neighbors = graph.getEdges(currVert);
     for (std::list<Edge>::const_iterator iter = neighbors.begin();
             iter != neighbors.end(); iter++)
     {
