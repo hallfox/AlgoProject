@@ -5,9 +5,10 @@
 #include <iostream>
 #include <fstream>
 
+#include "Graph.h"
 #include "Vertex.h"
 
-class SparseGraph
+class SparseGraph: public Graph
 {
     public:
         SparseGraph();
@@ -16,7 +17,9 @@ class SparseGraph
         void insert(Vertex*);
         void insert(int);
         Vertex* find(int);
-        const std::vector<Vertex*>& getVertices();
+        
+        virtual int getVertSize();
+        virtual const std::list<Edge> getEdges(int);
 
         friend std::ostream& operator<<(std::ostream&, const SparseGraph&);
     private:
