@@ -28,3 +28,4 @@ tests:
 
 .PHONY: clean test
 
+again: clean $(TARGET)
