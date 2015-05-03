@@ -13,9 +13,9 @@
 typedef std::pair<int, double> VertexKey;
 
 struct minComp {
-    bool operator()(const VertexKey &a, const VertexKey &b) const {
-        return a.second > b.second;
-    }
+  bool operator()(const VertexKey &a, const VertexKey &b) const {
+    return a.second > b.second;
+  }
 };
 
 int aStar(Graph &graph, int start, int end) {
@@ -28,7 +28,7 @@ int aStar(Graph &graph, int start, int end) {
   std::vector<int> estDistance(n);
   // used to reconstruct where the shortest path came from
   std::vector<int> backPath(n);
-
+  
   // the priority queue
   // A VertexKey is a pair<int, double> where int is the vertex id 
   // and double is the estimated distance
@@ -62,35 +62,35 @@ int aStar(Graph &graph, int start, int end) {
         // TODO: Reconstruct path
         return 0;
     }
-
+    
     // mark processed and iterate over the vertex's neighbors
     visited[currVert] = true;
     const std::list<Edge> neighbors = graph.getEdges(currVert);
     for (std::list<Edge>::const_iterator iter = neighbors.begin();
-            iter != neighbors.end(); iter++)
-    {
+	 iter != neighbors.end(); iter++)
+      {
         int vNext = iter->end;
         double dist = iter->weight;
-
+	
         // get ready to relax the edge
         int tDist = fromDistance[currVert] + dist;
-
+	
         // check if we should relax
         if (!visited[vNext] || tDist < fromDistance[vNext])
-        {
+	  {
             backPath[vNext] = currVert;
             fromDistance[vNext] = tDist;
             // !IMPORTANT: this uses our approximation to head toward the destination
             // h*() must never overestimate the actual distance, or the algorithm may be wrong 
             estDistance[vNext] = tDist + hDijkstra();
             if (!visited[vNext])
-            {
+	      {
                 toVisit.push(std::make_pair(vNext, estDistance[vNext]));
-            }
-        }
-    }
+	      }
+	  }
+      }
   }
-
+  
   return 0;
 }
 

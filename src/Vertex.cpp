@@ -26,6 +26,14 @@ void Vertex::addEdge(Edge e)
     edges.push_back(e);
 }
 
+void Vertex::addInEdge(Vertex *v, double w) {
+  edges.push_back(Edge(v->val, this->val, w));
+}
+
+void Vertex::addInEdge(Edge e) {
+  inEdges.push_back(e);
+}
+
 int Vertex::getValue()
 {
     return val;
@@ -33,6 +41,10 @@ int Vertex::getValue()
 
 const std::list<Edge>& Vertex::getEdges() {
   return edges;
+}
+
+const std::list<Edge>& Vertex::getInEdges() {
+  return inEdges;
 }
 
 std::ostream& operator<<(std::ostream& os, const Vertex& v)
