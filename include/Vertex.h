@@ -16,10 +16,14 @@ class Vertex
         void addEdge(Vertex*, double);
         void addEdge(Edge);
         int getValue();
+	void addInEdge(Vertex *, double);
+	void addInEdge(Edge);
         const std::list<Edge>& getEdges();
+	const std::vector<Edge>& getInEdges();
         friend std::ostream& operator<<(std::ostream&, const Vertex&);
     private:
         std::list<Edge> edges;
+	std::vector<Edge> inEdges;
         int val;
 };
 
