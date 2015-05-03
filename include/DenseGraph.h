@@ -7,8 +7,10 @@
 #include <algorithm>
 #include <queue>
 
+#include "Graph.h"
+
 //This class will be used to create a graph library.
-struct Edge{
+/*struct Edge{
 int vect1;
 int vect2;
 double weight;
@@ -17,19 +19,19 @@ double weight;
 		vect2 = v2;
 		weight = w;
 	}
-};
+};*/
 
 //This class will be used to create a graph library.   
 enum Status{NOT_VISITED,VISITED};
 
-class DenseGraph{
+class DenseGraph: public Graph{
 	private:
 		//Put your private data members here
 		int numVertices;
 		int numEdges;
 		std::vector<int> vertices;
 		std::vector<Edge> edges;
-		double **adjMatrix; //2d array of bools
+		double **adjMatrix; //2d array 
 		//Put your private methods here
         void followComponent(int v, std::vector<int> &accountedVertices);
         void DFTHelper(int source , Status * visited, std::queue<int> &traverseNodes);
@@ -71,5 +73,8 @@ class DenseGraph{
 		//* Step Away
 		void stepAway(int source, int closeness, std::string file);
         int closenessHelp(int v1, int v2);
+		
+		virtual int getVertSize();
+		virtual const std::list<Edge> getEdges(int);
 };
 #endif // GRAPH_H
