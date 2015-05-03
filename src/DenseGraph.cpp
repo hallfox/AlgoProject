@@ -7,6 +7,7 @@
 #include <functional>
 #include <limits>
 #include <math.h>
+#include <list>
 static const int PLACEHOLDER = 0;
 //static const double INFINITY = INFINITY; //std::numeric_limits<double>::infinity();
 //static const int MAX = std::numeric_limits<int>::max();
@@ -72,7 +73,7 @@ void DenseGraph::printVertices(){
 void DenseGraph::printEdges(){
     cout << "Printing edges" << endl;
     for(unsigned i = 0; i < edges.size(); ++i){
-        cout << "(" << edges.at(i).vect1 << " ," << edges.at(i).vect2 << ")" << endl;
+        cout << "(" << edges.at(i).start << " ," << edges.at(i).end << ")" << endl;
     }
 }
 
@@ -94,8 +95,8 @@ void DenseGraph::writeToFile(std::string file){
     outf << to_string(numEdges) << "\n" << endl;
     if(!edges.empty()){
         for(unsigned i = 0; i < edges.size(); ++i){
-            outf << to_string(edges[i].vect1) << ", " <<
-            to_string(edges[i].vect2) << ", " <<
+            outf << to_string(edges[i].start) << ", " <<
+            to_string(edges[i].end) << ", " <<
             to_string(edges[i].weight) << "\n" << endl;
         }
     }
@@ -116,7 +117,6 @@ bool DenseGraph::empty(){
 //Add Edge
 void DenseGraph::addEdge(int v1, int v2, double weight){
     Edge e = Edge(v1,v2,weight);
-    Edge e1 = Edge(v2,v1,weight);
     edges.push_back(e);
     int pos1 = searchVector(vertices, v1);
    // cout <<"Vector "<< v1 <<" pos 1" << pos1 << endl; DEBUG
@@ -276,8 +276,8 @@ bool DenseGraph::partitionable(){
     unsigned i;
     bool retVal = true;
     for(i = 0; i < edges.size(); ++i){
-        int vect1 = edges.at(i).vect1;
-        int vect2 = edges.at(i).vect2;
+        int vect1 = edges.at(i).start;
+        int vect2 = edges.at(i).end;
         int redVect1 = searchVector(red, vect1);
         int blueVect1 = searchVector(blue, vect1);
         int redVect2 = searchVector(red, vect2);
@@ -420,5 +420,22 @@ void DenseGraph::prim(int source, ofstream& file, Status visited[]){
         edgeNum += 1;
     }
 
+
+}
+
+int DenseGraph::getVertSize()
+{
+    return numVertices;
+}
     
+const list<Edge> DenseGraph::getEdges(int v)
+{
+    list<Edge> ret;
+    for( int i = 1; i <= numVertices; ++i){
+        if(adjMatrix[v][i] != 0){
+            Edge e = Edge(v,i, adjMatrix[v][i]);
+            ret.push_back(e);
+        }
+    }
+    return ret;
 }
