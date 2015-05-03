@@ -8,7 +8,6 @@
 
 #include "Graph.h"
 #include "SparseGraph.h"
-#include "DenseGraph.h"
 #include "Heuristics.h"
 
 typedef std::pair<int, double> VertexKey;
@@ -51,7 +50,6 @@ int aStar(Graph &graph, int start, int end) {
     // pop the best estimated distance off the pq
     VertexKey key = toVisit.top();
     int currVert = key.first;
-    double currDist = key.second;
     toVisit.pop();
 
     // check to make sure we haven't processed it already due to our
