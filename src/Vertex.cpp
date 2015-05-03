@@ -43,7 +43,7 @@ const std::list<Edge>& Vertex::getEdges() {
   return edges;
 }
 
-const std::list<Edge>& Vertex::getInEdges() {
+const std::vector<Edge>& Vertex::getInEdges() {
   return inEdges;
 }
 
