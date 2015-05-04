@@ -19,16 +19,27 @@ struct minComp {
   }
 };
 
+void printPath(const std::vector<int> &path, int dest)
+{
+  int vert = dest;
+  while (path[vert] != -1)
+  {
+    std::cout << vert << ", ";
+    vert = path[vert];
+  }
+  std::cout << vert << "\n";
+}
+
 int aStar(Graph &graph, int start, int end) {
   int n = graph.getVertSize();
   // nodes that have been visited
   std::vector<bool> visited(n, false);
   // keeps track of shortest distance
-  std::vector<int> fromDistance(n, std::numeric_limits<int>::max()); 
+  std::vector<double> fromDistance(n, std::numeric_limits<double>::max()); 
   // keeps track of estimated shortest distance
-  std::vector<int> estDistance(n);
+  std::vector<double> estDistance(n);
   // used to reconstruct where the shortest path came from
-  std::vector<int> backPath(n);
+  std::vector<int> backPath(n, -1);
   
   // the priority queue
   // A VertexKey is a pair<int, double> where int is the vertex id 
@@ -61,36 +72,38 @@ int aStar(Graph &graph, int start, int end) {
     // did we find the destination?
     if (currVert == end)
     {
-        // TODO: Reconstruct path
-        return estDistance[currVert];
+        printPath(backPath, end);
+        return fromDistance[end];
     }
     
     // mark processed and iterate over the vertex's neighbors
     visited[currVert] = true;
+    //std::cout << "-----Vertex: " << currVert << "\n";
     const std::list<Edge> neighbors = graph.getEdges(currVert);
     for (std::list<Edge>::const_iterator iter = neighbors.begin();
 	 iter != neighbors.end(); iter++)
-      {
+    {
         int vNext = iter->end;
         double dist = iter->weight;
+        //std::cout << "Considering: " << vNext << "\n";
 	
         // get ready to relax the edge
         int tDist = fromDistance[currVert] + dist;
 	
         // check if we should relax
         if (!visited[vNext] || tDist < fromDistance[vNext])
-	  {
+        {
             backPath[vNext] = currVert;
             fromDistance[vNext] = tDist;
             // !IMPORTANT: this uses our approximation to head toward the destination
             // h*() must never overestimate the actual distance, or the algorithm may be wrong 
             estDistance[vNext] = tDist + hDijkstra();
             if (!visited[vNext])
-	      {
+            {
                 toVisit.push(std::make_pair(vNext, estDistance[vNext]));
-	      }
-	  }
-      }
+            }
+        }
+    }
   }
   
   return -1;
@@ -98,12 +111,14 @@ int aStar(Graph &graph, int start, int end) {
 
 int main(int argc, char *argv[])
 {
-  //std::ifstream file("test/LargeGrid.txt");
+  std::ifstream file("test/SmallGrid.txt");
+  SparseGraph testGraph(file);
   DenseGraph sgraph;
   sgraph.readFromFile("test/SmallGrid.txt");
-  //file.close();
+  file.close();
   
-  std::cout << "Distance to end: " << aStar(sgraph, 0, 433) << "\n";
+  std::cout << "Distance to end: " << aStar(sgraph, 0, 10) << "\n";
+  std::cout << "Sparse distance: " << aStar(testGraph, 0, 10) << "\n";
   
   return 0;
 }
