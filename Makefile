@@ -37,6 +37,7 @@ graphs: tests
 	$(TESTER) test/SmallTorus.txt 4 9 12
 	$(TESTER) test/MedTorus.txt 10 9 12
 	$(TESTER) test/LargeTorus.txt 22 9 12
+	$(TESTER) test/UniformGrid.txt 100 13 0
 
 
 
