@@ -12,6 +12,7 @@
 #include "Heuristics.h"
 
 typedef std::pair<int, double> VertexKey;
+enum Hdist {H_RAND, H_DIJKSTRA, H_EUCLIDIAN, H_MANHATTAN};
 
 struct minComp {
   bool operator()(const VertexKey &a, const VertexKey &b) const {
@@ -30,7 +31,7 @@ void printPath(const std::vector<int> &path, int dest)
   std::cout << vert << "\n";
 }
 
-int aStar(Graph &graph, int start, int end) {
+int aStar(Graph &graph, int start, int end, Hdist heur) {
   int n = graph.getVertSize();
   // nodes that have been visited
   std::vector<bool> visited(n, false);
@@ -97,7 +98,26 @@ int aStar(Graph &graph, int start, int end) {
             fromDistance[vNext] = tDist;
             // !IMPORTANT: this uses our approximation to head toward the destination
             // h*() must never overestimate the actual distance, or the algorithm may be wrong 
-            estDistance[vNext] = tDist + hDijkstra();
+            int size;
+            switch(heur)
+            {
+                case H_DIJKSTRA:
+                    estDistance[vNext] = tDist + hDijkstra();
+                    break;
+                case H_MANHATTAN:
+                    size = floor(sqrt(graph.getVertSize()));
+                    estDistance[vNext] = tDist + hManhattan(start, end,
+                            size, size);
+                    break;
+                case H_EUCLIDIAN:
+                    size = floor(sqrt(graph.getVertSize()));
+                    estDistance[vNext] = tDist + hAStarGrid(start, end,
+                            size, size);
+                    break;
+                case H_RAND:
+                    estDistance[vNext] = tDist + hAStarRand();
+                    break;
+            }
             if (!visited[vNext])
             {
                 toVisit.push(std::make_pair(vNext, estDistance[vNext]));
@@ -117,8 +137,8 @@ int main(int argc, char *argv[])
   sgraph.readFromFile("test/SmallGrid.txt");
   file.close();
   
-  std::cout << "Distance to end: " << aStar(sgraph, 0, 10) << "\n";
-  std::cout << "Sparse distance: " << aStar(testGraph, 0, 10) << "\n";
+  std::cout << "Distance to end: " << aStar(sgraph, 0, 10, H_DIJKSTRA) << "\n";
+  std::cout << "Sparse distance: " << aStar(testGraph, 0, 10, H_MANHATTAN) << "\n";
   
   return 0;
 }

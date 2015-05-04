@@ -8,19 +8,19 @@
 
 int hDijkstra() { return 0; }
 
-int hAStarGrid(int start, int end, int width, int height) { //only to be used on grid-shaped graphs
+double hAStarGrid(int start, int end, int width, int height) { //only to be used on grid-shaped graphs
   int startx = start%width;
-  int starty = height/start;
+  int starty = start/height;
   int endx = end%width;
-  int endy = height/end;
-  return (int)sqrt(pow(endx-startx, 2) + pow(endy - starty, 2));
+  int endy = end/height;
+  return sqrt(pow(endx-startx, 2) + pow(endy - starty, 2));
 }
 
 int hManhattan(int start, int end, int width, int height) { //only to be used on grid-shaped graphs
   int startx = start%width;
-  int starty = height/start;
+  int starty = start/height;
   int endx = end%width;
-  int endy = height/end;
+  int endy = end/height;
   return abs(endx - startx) + abs(endy - starty);
 }
 
@@ -36,7 +36,7 @@ double hIncomingEdges(SparseGraph sg, int end) { //not sure exactly how well thi
   return min.weight;
 }
 
-int hAStarRand() { //may not run as accurately as other heuristics
+double hAStarRand() { //may not run as accurately as other heuristics
   return rand();
 }
 
