@@ -34,6 +34,7 @@ int aStar(Graph &graph, int start, int end) {
   // and double is the estimated distance
   std::priority_queue<VertexKey, std::vector<VertexKey>, minComp> toVisit;
   toVisit.push(std::make_pair(start, 0.0));
+  fromDistance[start] = 0;
 
   // NOTE: since C++ doesn't support a decrease key op and we simply
   // can't be bothered to write our own pqueue, we take the strategy
@@ -60,7 +61,7 @@ int aStar(Graph &graph, int start, int end) {
     if (currVert == end)
     {
         // TODO: Reconstruct path
-        return 0;
+        return estDistance[currVert];
     }
     
     // mark processed and iterate over the vertex's neighbors
@@ -91,16 +92,16 @@ int aStar(Graph &graph, int start, int end) {
       }
   }
   
-  return 0;
+  return -1;
 }
 
 int main(int argc, char *argv[])
 {
-  std::ifstream file("test/TestGraph1.txt");
+  std::ifstream file("test/LargeGrid.txt");
   SparseGraph sgraph(file);
   file.close();
   
-  std::cout << sgraph;
+  std::cout << "Distance to end: " << aStar(sgraph, 0, 433) << "\n";
   
   return 0;
 }
