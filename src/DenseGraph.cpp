@@ -19,7 +19,7 @@ DenseGraph::DenseGraph() : numVertices(0), numEdges(0), adjMatrix(nullptr) {}
 //Delete
 DenseGraph::~DenseGraph(){
     if(adjMatrix != nullptr){
-        for(int i = 0; i <= numVertices; ++i){
+        for(int i = 0; i < numVertices; ++i){
             delete[] adjMatrix[i];
         }
         delete[] adjMatrix;
@@ -32,18 +32,18 @@ void DenseGraph::readFromFile(std::string file){
     string line;
     getline(inputFile,line);
     numVertices = stoi(line);
-    adjMatrix = new double*[numVertices+1];
+    adjMatrix = new double*[numVertices];
     //cout << "Size of graph: " << numVertices << "\n";
-    for(int i = 0; i <= numVertices; ++i){
-        adjMatrix[i] = new double[numVertices+1];
-        for(int j = 0; j <= numVertices; ++j){
+    for(int i = 0; i < numVertices; ++i){
+        adjMatrix[i] = new double[numVertices];
+        for(int j = 0; j < numVertices; ++j){
             adjMatrix[i][j] = 0;
            //cout << "Edge " << "( " << i << "," << j << ")" << "=" << adjMatrix[i][j] << endl;
             //DEBUG
         }
     }
-    vertices.push_back(PLACEHOLDER);
-    getline(inputFile,line);
+    //vertices.push_back(PLACEHOLDER);
+    //getline(inputFile,line);
     numEdges = 0;
     while(getline(inputFile,line)){
         int vert1 = 0;
@@ -435,11 +435,13 @@ int DenseGraph::getVertSize()
 const list<Edge> DenseGraph::getEdges(int v)
 {
     list<Edge> ret;
-    for( int i = 1; i <= numVertices; ++i){
+    for( int i = 0; i < numVertices; ++i){
+        //cout << adjMatrix[v][i] << " ";
         if(adjMatrix[v][i] != 0){
             Edge e = Edge(v,i, adjMatrix[v][i]);
             ret.push_back(e);
         }
     }
+    //cout << "\n";
     return ret;
 }
