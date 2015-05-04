@@ -13,6 +13,7 @@ LIB=
  
 $(TARGET): $(OBJECTS) 
 	@echo " Linking..."
+	@mkdir -p bin
 	@echo " $(CC) $^ -o $(TARGET) $(LIB)"; $(CC) $^ -o $(TARGET) $(LIB)
 
 $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
