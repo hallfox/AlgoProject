@@ -8,11 +8,14 @@ Vertex::Vertex()
 Vertex::Vertex(int v)
 {
     val = v;
+    edges = std::list<Edge>();
+    inEdges = std::list<Edge>();
 }
 
 Vertex::Vertex(const Vertex& v)
 {
     edges = std::list<Edge>(v.edges);
+    inEdges = std::list<Edge>(v.inEdges);
     val = v.val;
 }
 
@@ -43,7 +46,7 @@ const std::list<Edge>& Vertex::getEdges() {
   return edges;
 }
 
-const std::vector<Edge>& Vertex::getInEdges() {
+const std::list<Edge>& Vertex::getInEdges() {
   return inEdges;
 }
 
