@@ -2,6 +2,7 @@ CC=g++
 SRCDIR=src
 BUILDDIR=build
 TARGET=bin/astar
+TESTER=bin/ggen
 
 SRCEXT=cpp
 SOURCES=$(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
@@ -24,7 +25,18 @@ clean:
 	@echo "removing garbage"; rm -f *~ *#; rm -f ./src/*~ ./src/*#; rm -f ./include/*~ ./include/*#
 
 tests:
-	$(CC) gen/RandomGraph.cpp gen/UF.cpp -o bin/ggen
+	$(CC) gen/RandomGraph.cpp gen/UF.cpp -o $(TESTER)
+	$(TESTER) test/SmallGeo.txt 20 3 12
+	$(TESTER) test/MedGeo.txt 100 3 12
+	$(TESTER) test/LargeGeo.txt 500 3 12
+	$(TESTER) test/SmallGrid.txt 20 13 12
+	$(TESTER) test/MedGrid.txt 100 13 12
+	$(TESTER) test/LargeGrid.txt 500 13 12
+	$(TESTER) test/SmallTorus.txt 20 9 12
+	$(TESTER) test/MedTorus.txt 100 9 12
+	$(TESTER) test/LargeTorus.txt 500 9 12
+
+
 
 .PHONY: clean test
 
