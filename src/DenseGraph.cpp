@@ -19,10 +19,10 @@ DenseGraph::DenseGraph() : numVertices(0), numEdges(0), adjMatrix(nullptr) {}
 //Delete
 DenseGraph::~DenseGraph(){
     if(adjMatrix != nullptr){
-        for(int i = 0; i < numVertices; ++i){
-            delete adjMatrix[i];
+        for(int i = 0; i <= numVertices; ++i){
+            delete[] adjMatrix[i];
         }
-        delete adjMatrix;
+        delete[] adjMatrix;
     }
 }
 
@@ -33,6 +33,7 @@ void DenseGraph::readFromFile(std::string file){
     getline(inputFile,line);
     numVertices = stoi(line);
     adjMatrix = new double*[numVertices+1];
+    //cout << "Size of graph: " << numVertices << "\n";
     for(int i = 0; i <= numVertices; ++i){
         adjMatrix[i] = new double[numVertices+1];
         for(int j = 0; j <= numVertices; ++j){
@@ -43,13 +44,14 @@ void DenseGraph::readFromFile(std::string file){
     }
     vertices.push_back(PLACEHOLDER);
     getline(inputFile,line);
-    numEdges = stoi(line);
+    numEdges = 0;
     while(getline(inputFile,line)){
         int vert1 = 0;
         int vert2 = 0;
         double weight;
         stringstream ss(line);
         ss >> vert1;
+        if (vert1 == -1) break;
         if (!binary_search(vertices.begin(), vertices.end(), vert1)) {
             vertices.push_back(vert1);
         }
@@ -58,7 +60,9 @@ void DenseGraph::readFromFile(std::string file){
             vertices.push_back(vert2);
         }
         ss >> weight;
+        //cout << "Adding edge <" << vert1 << ", " << vert2 << ", " << weight << ">\n";
         addEdge(vert1,vert2,weight);
+        numEdges++;
     }
     
 }
@@ -160,7 +164,7 @@ int DenseGraph::numConnectedComponents(){
     vector<int> accountedVertices;
     accountedVertices.push_back(PLACEHOLDER);
     i = 1;
-    while(accountedVertices.size() <= numVertices){
+    while(accountedVertices.size() <= (unsigned)numVertices){
         if(searchVector(accountedVertices, vertices.at(i)) == -1){ //If vertex in question is not accounted for
             accountedVertices.push_back(vertices.at(i));
             //cout << "Pushed " << vertices.at(i) << endl;

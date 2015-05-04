@@ -8,6 +8,7 @@
 
 #include "Graph.h"
 #include "SparseGraph.h"
+#include "DenseGraph.h"
 #include "Heuristics.h"
 
 typedef std::pair<int, double> VertexKey;
@@ -97,9 +98,10 @@ int aStar(Graph &graph, int start, int end) {
 
 int main(int argc, char *argv[])
 {
-  std::ifstream file("test/LargeGrid.txt");
-  SparseGraph sgraph(file);
-  file.close();
+  //std::ifstream file("test/LargeGrid.txt");
+  DenseGraph sgraph;
+  sgraph.readFromFile("test/SmallGrid.txt");
+  //file.close();
   
   std::cout << "Distance to end: " << aStar(sgraph, 0, 433) << "\n";
   
