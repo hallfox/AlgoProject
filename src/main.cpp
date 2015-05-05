@@ -155,9 +155,9 @@ int main(int argc, char *argv[])
     dgraph.readFromFile(testFiles[i]);
 
     int start = 0, end = 0;
-    if (i % 3 == 0) end = 19;
-    else if (i % 3 == 1) end = 99;
-    else end = 499;
+    if (i % 3 == 0) end = 900;
+    else if (i % 3 == 1) end = 3000;
+    else end = 12000;
     
     std::cout << "File being tested: " << testFiles[i] << "\n";
     std::cout << "-------------------\n";
