@@ -1,7 +1,7 @@
 CC=g++
 SRCDIR=src
 BUILDDIR=build
-TARGET=bin/astar
+TARGET=astar
 
 SRCEXT=cpp
 SOURCES=$(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
@@ -20,11 +20,11 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 
 clean:
 	@echo " Cleaning..."
-	@echo " $(RM) -r $(BUILDDIR) $(TARGET) bin/ggen"; $(RM) -r $(BUILDDIR) $(TARGET); $(RM) bin/ggen
+	@echo " $(RM) -r $(BUILDDIR) $(TARGET) ggen"; $(RM) -r $(BUILDDIR) $(TARGET); $(RM) ggen
 	@echo "removing garbage"; rm -f *~ *#; rm -f ./src/*~ ./src/*#; rm -f ./include/*~ ./include/*#
 
 tests:
-	$(CC) gen/RandomGraph.cpp gen/UF.cpp -o bin/ggen
+	$(CC) gen/RandomGraph.cpp gen/UF.cpp -o ggen
 
 .PHONY: clean test
 
