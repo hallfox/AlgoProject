@@ -36,6 +36,7 @@ Additionally as we learn more about the structure of A* we will look for certain
 Test cases will begin with an integer **N**, the number of vertices on the first line. The following lines will contain a value **V**, which will be the value of a vertex followed by **E** the vertex connected to it, then a weight **W**. The file is terminated by a -1.
 
 #Test Cases
+
 - grid graph
   - 200, 1000, 5000 nodes (maybe more depending on results)
 - toroid graph (2D, 3D)
