@@ -85,6 +85,7 @@ int SparseGraph::getVertSize()
 
 const std::list<Edge> SparseGraph::getEdges(int v)
 {
+    if (verts[v] == nullptr) return std::list<Edge>();
     return verts[v]->getEdges();
 }
 

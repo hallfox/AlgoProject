@@ -5,6 +5,8 @@
 #include <vector>
 #include <list>
 #include <utility>
+#include <cmath>
+#include <chrono>
 
 #include "Graph.h"
 #include "SparseGraph.h"
@@ -28,10 +30,9 @@ void printPath(const std::vector<int> &path, int dest)
     std::cout << vert << ", ";
     vert = path[vert];
   }
-  std::cout << vert << "\n";
 }
 
-int aStar(Graph &graph, int start, int end, Hdist heur) {
+int aStar(Graph &graph, int start, int end, int heur) {
   int n = graph.getVertSize();
   // nodes that have been visited
   std::vector<bool> visited(n, false);
@@ -131,14 +132,72 @@ int aStar(Graph &graph, int start, int end, Hdist heur) {
 
 int main(int argc, char *argv[])
 {
-  std::ifstream file("test/SmallGrid.txt");
-  SparseGraph testGraph(file);
-  DenseGraph sgraph;
-  sgraph.readFromFile("test/SmallGrid.txt");
-  file.close();
-  
-  std::cout << "Distance to end: " << aStar(sgraph, 0, 10, H_DIJKSTRA) << "\n";
-  std::cout << "Sparse distance: " << aStar(testGraph, 0, 10, H_MANHATTAN) << "\n";
+  const int FILES = 9;
+  std::string testFiles[FILES] = { 
+      "test/SmallGrid.txt",
+      "test/MedGrid.txt",
+      "test/LargeGrid.txt",
+      "test/SmallGeo.txt",
+      "test/MedGeo.txt",
+      "test/LargeGeo.txt",
+      "test/SmallTorus.txt",
+      "test/MedTorus.txt",
+      "test/LargeTorus.txt"
+  };
+
+  for (int i = 0; i < FILES; i++)
+  {
+    std::ifstream file(testFiles[i]);
+    SparseGraph sgraph(file);
+    file.close();
+
+    DenseGraph dgraph;
+    dgraph.readFromFile(testFiles[i]);
+
+    int start = 0, end = 0;
+    if (i % 3 == 0) end = 19;
+    else if (i % 3 == 1) end = 99;
+    else end = 499;
+    
+    std::cout << "File being tested: " << testFiles[i] << "\n";
+    std::cout << "-------------------\n";
+    for (int h = H_RAND; h <= H_MANHATTAN; h++)
+    {
+        switch (h)
+        {
+            case H_RAND: 
+                std::cout << "\t\tRandom Heuristic:\n"; break;
+            case H_DIJKSTRA: 
+                std::cout << "\t\tDijkstra's Algorithm:\n"; break;
+            case H_EUCLIDIAN: 
+                std::cout << "\t\tEuclidian Distance:\n"; break;
+            case H_MANHATTAN: 
+                std::cout << "\t\tManhattanDistance:\n"; break;
+            default: 
+                std::cout << "Unknown algorithm\n"; continue;
+        }
+        std::cout << "\t\t== Sparse Graph:\n\t\t>> Path: ";
+        //std::cout << sgraph << "\n";
+
+        auto sStartTime = std::chrono::high_resolution_clock::now();
+        double sDist = aStar(sgraph, start, end, h);
+        auto sEndTime = std::chrono::high_resolution_clock::now();
+        auto sparseTime = std::chrono::duration_cast<std::chrono::milliseconds>(sEndTime - sStartTime).count();
+
+        std::cout << "\n\t\t== Distance: " << sDist << "\n";
+        std::cout << "\t\t== Time: " << sparseTime << "ms\n";
+        std::cout << "\t\t== Dense Graph:\n\t\t==Path: ";
+
+
+        auto dStartTime = std::chrono::high_resolution_clock::now();
+        double dDist = aStar(dgraph, start, end, h);
+        auto dEndTime = std::chrono::high_resolution_clock::now();
+        auto denseTime = std::chrono::duration_cast<std::chrono::milliseconds>(dEndTime - dStartTime).count();
+
+        std::cout << "\n\t\t== Distance: " << dDist << "\n";
+        std::cout << "\t\t== Time: " << denseTime << "ms\n";
+    }
+  }
   
   return 0;
 }
