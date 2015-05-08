@@ -72,6 +72,7 @@ class DenseGraph: public Graph{
 		bool MST(std::string file);
 		//* Step Away
 		void stepAway(int source, int closeness, std::string file);
+		Vertex *find(int);
         int closenessHelp(int v1, int v2);
 		
 		virtual int getVertSize();

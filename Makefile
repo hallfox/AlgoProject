@@ -3,6 +3,7 @@ SRCDIR=src
 BUILDDIR=build
 TARGET=bin/astar
 TESTER=bin/ggen
+TARGET=astar
 
 SRCEXT=cpp
 SOURCES=$(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
@@ -22,7 +23,7 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 
 clean:
 	@echo " Cleaning..."
-	@echo " $(RM) -r $(BUILDDIR) $(TARGET) bin/ggen"; $(RM) -r $(BUILDDIR) $(TARGET); $(RM) bin/ggen
+	@echo " $(RM) -r $(BUILDDIR) $(TARGET) ggen"; $(RM) -r $(BUILDDIR) $(TARGET); $(RM) ggen
 	@echo "removing garbage"; rm -f *~ *#; rm -f ./src/*~ ./src/*#; rm -f ./include/*~ ./include/*#
 
 tests:
@@ -40,7 +41,7 @@ graphs: tests
 	$(TESTER) test/LargeTorus.txt 122 9 12
 	$(TESTER) test/UniformGrid.txt 100 13 0
 
-
+	$(CC) gen/RandomGraph.cpp gen/UF.cpp -o ggen
 
 .PHONY: clean test
 
