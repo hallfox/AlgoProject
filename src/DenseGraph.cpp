@@ -8,6 +8,7 @@
 #include <limits>
 #include <math.h>
 #include <list>
+#include <cfloat>
 static const int PLACEHOLDER = 0;
 
 #define WRITE_GARBAGE 1
@@ -40,11 +41,17 @@ Vertex *DenseGraph::find(int val) {
     remove(fn);
   }
   //DEBUG
+  int minIndex = -1;
+  double minWeight = DBL_MAX;
   for(int i = 0; i < numEdges; i++) {
-    if(edges[i].end == val) {
-      Edge temp = Edge(edges[i].start, edges[i].end, edges[i].weight);
-      vert->addInEdge(temp);
+    if((edges[i].end == val) && (edges[i].weight < minWeight)) {
+      minIndex = i;
+      minWeight = edges[i].weight;
     }
+  }
+  if(minIndex != -1) {
+    Edge minEdge(edges[minIndex].start, edges[minIndex].end, edges[minIndex].weight);
+    vert->addInEdge(minEdge);
   }
   return vert;
 }
