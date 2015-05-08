@@ -28,10 +28,13 @@ DenseGraph::~DenseGraph(){
 
 //find (for use with incoming edges heuristic)
 Vertex *DenseGraph::find(int val) {
-  Vertex *vert = (Vertex *)calloc(1, sizeof(Vertex));
+  Vertex v = Vertex(val);
+  Vertex *vert = &v;
+  std::cout << val << std::endl;
+  //DEBUG
   for(int i = 0; i < numEdges; i++) {
     if(edges[i].end == val) {
-      Edge temp(edges[i].start, edges[i].end, edges[i].weight);
+      Edge temp = Edge(edges[i].start, edges[i].end, edges[i].weight);
       vert->addInEdge(temp);
     }
   }
