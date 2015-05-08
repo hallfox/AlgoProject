@@ -14,7 +14,7 @@
 #include "Heuristics.h"
 
 typedef std::pair<int, double> VertexKey;
-enum Hdist {H_RAND, H_DIJKSTRA, H_EUCLIDIAN, H_MANHATTAN};
+enum Hdist {H_RAND, H_DIJKSTRA, H_EUCLIDIAN, H_MANHATTAN, H_SHORTEST_INCOMING_EDGE};
 
 struct minComp {
   bool operator()(const VertexKey &a, const VertexKey &b) const {
@@ -95,33 +95,35 @@ int aStar(Graph &graph, int start, int end, int heur) {
         // check if we should relax
         if (!visited[vNext] || tDist < fromDistance[vNext])
         {
-            backPath[vNext] = currVert;
-            fromDistance[vNext] = tDist;
-            // !IMPORTANT: this uses our approximation to head toward the destination
-            // h*() must never overestimate the actual distance, or the algorithm may be wrong 
-            int size;
-            switch(heur)
+	  backPath[vNext] = currVert;
+	  fromDistance[vNext] = tDist;
+	  // !IMPORTANT: this uses our approximation to head toward the destination
+	  // h*() must never overestimate the actual distance, or the algorithm may be wrong 
+	  int size;
+	  switch(heur)
             {
-                case H_DIJKSTRA:
-                    estDistance[vNext] = tDist + hDijkstra();
-                    break;
-                case H_MANHATTAN:
-                    size = floor(sqrt(graph.getVertSize()));
-                    estDistance[vNext] = tDist + hManhattan(start, end,
-                            size, size);
-                    break;
-                case H_EUCLIDIAN:
-                    size = floor(sqrt(graph.getVertSize()));
-                    estDistance[vNext] = tDist + hAStarGrid(start, end,
-                            size, size);
-                    break;
-                case H_RAND:
-                    estDistance[vNext] = tDist + hAStarRand();
-                    break;
+	    case H_DIJKSTRA:
+	      estDistance[vNext] = tDist + hDijkstra();
+	      break;
+	    case H_MANHATTAN:
+	      size = floor(sqrt(graph.getVertSize()));
+	      estDistance[vNext] = tDist + hManhattan(start, end,
+						      size, size);
+	      break;
+	    case H_EUCLIDIAN:
+	      size = floor(sqrt(graph.getVertSize()));
+	      estDistance[vNext] = tDist + hAStarGrid(start, end,
+						      size, size);
+	      break;
+	    case H_RAND:
+	      estDistance[vNext] = tDist + hAStarRand();
+	      break;
+	    case H_SHORTEST_INCOMING_EDGE:
+	      estDistance[vNext] = tDist + hIncomingEdges(graph, vNext);
             }
-            if (!visited[vNext])
+	  if (!visited[vNext])
             {
-                toVisit.push(std::make_pair(vNext, estDistance[vNext]));
+	      toVisit.push(std::make_pair(vNext, estDistance[vNext]));
             }
         }
     }
@@ -130,8 +132,20 @@ int aStar(Graph &graph, int start, int end, int heur) {
   return -1;
 }
 
+template<class T>
+int contains(T arr[], int len, T key) {
+  for(int i = 0; i < len; i++) {
+    if(arr[i] == key) return i;
+  }
+  return -1;
+}
+
 int main(int argc, char *argv[])
 {
+  if(argc != 2) { //inform user how to use this
+    std::cout << "Usage: ./astar <input-file>" << std::endl;
+    return 0;
+  }
   const int FILES = 9;
   std::string testFiles[FILES] = { 
       "test/SmallGrid.txt",
@@ -144,60 +158,67 @@ int main(int argc, char *argv[])
       "test/MedTorus.txt",
       "test/LargeTorus.txt"
   };
-
-  for (int i = 0; i < FILES; i++)
-  {
-    std::ifstream file(testFiles[i]);
-    SparseGraph sgraph(file);
-    file.close();
-
-    DenseGraph dgraph;
-    dgraph.readFromFile(testFiles[i]);
-
-    int start = 0, end = 0;
-    if (i % 3 == 0) end = 900;
-    else if (i % 3 == 1) end = 3000;
-    else end = 12000;
-    
-    std::cout << "File being tested: " << testFiles[i] << "\n";
-    std::cout << "-------------------\n";
-    for (int h = H_RAND; h <= H_MANHATTAN; h++)
-    {
-        switch (h)
-        {
-            case H_RAND: 
-                std::cout << "\t\tRandom Heuristic:\n"; break;
-            case H_DIJKSTRA: 
-                std::cout << "\t\tDijkstra's Algorithm:\n"; break;
-            case H_EUCLIDIAN: 
-                std::cout << "\t\tEuclidian Distance:\n"; break;
-            case H_MANHATTAN: 
-                std::cout << "\t\tManhattanDistance:\n"; break;
-            default: 
-                std::cout << "Unknown algorithm\n"; continue;
-        }
-        std::cout << "\t\t== Sparse Graph:\n\t\t>> Path: ";
-        //std::cout << sgraph << "\n";
-
-        auto sStartTime = std::chrono::high_resolution_clock::now();
-        double sDist = aStar(sgraph, start, end, h);
-        auto sEndTime = std::chrono::high_resolution_clock::now();
-        auto sparseTime = std::chrono::duration_cast<std::chrono::milliseconds>(sEndTime - sStartTime).count();
-
-        std::cout << "\n\t\t== Distance: " << sDist << "\n";
-        std::cout << "\t\t== Time: " << sparseTime << "ms\n";
-        std::cout << "\t\t== Dense Graph:\n\t\t==Path: ";
-
-
-        auto dStartTime = std::chrono::high_resolution_clock::now();
-        double dDist = aStar(dgraph, start, end, h);
-        auto dEndTime = std::chrono::high_resolution_clock::now();
-        auto denseTime = std::chrono::duration_cast<std::chrono::milliseconds>(dEndTime - dStartTime).count();
-
-        std::cout << "\n\t\t== Distance: " << dDist << "\n";
-        std::cout << "\t\t== Time: " << denseTime << "ms\n";
+  std::string infile(argv[1]);
+  int index = contains(testFiles, FILES, infile);
+  if(index == -1) {
+    std::cout << "Error: not a valid file. Please try one of the following: " << std::endl;
+    for(int i = 0; i < FILES; i++) {
+      std::cout << testFiles[i] << std::endl;
     }
+    exit(1);
   }
+  std::ifstream file(testFiles[index]);
+  SparseGraph sgraph(file);
+  file.close();
+  
+  DenseGraph dgraph;
+  dgraph.readFromFile(testFiles[index]);
+  
+  int start = 0, end = 0;
+  if (index % 3 == 0) end = 900;
+  else if (index % 3 == 1) end = 3000;
+  else end = 12000;
+  
+  std::cout << "File being tested: " << testFiles[index] << "\n";
+  std::cout << "-------------------\n";
+  for (int h = H_RAND; h <= H_SHORTEST_INCOMING_EDGE; h++)
+    {
+      switch (h)
+	{
+	case H_RAND: 
+	  std::cout << "\tRandom Heuristic:\n"; break;
+	case H_DIJKSTRA: 
+	  std::cout << "\tDijkstra's Algorithm:\n"; break;
+	case H_EUCLIDIAN: 
+	  std::cout << "\tEuclidean Distance:\n"; break;
+	case H_MANHATTAN: 
+	  std::cout << "\tManhattan Distance:\n"; break;
+	case H_SHORTEST_INCOMING_EDGE:
+	  std::cout << "\tShortest Incoming Edge:\n"; break;
+	default: 
+	  std::cout << "Unknown algorithm\n"; continue;
+        }
+      std::cout << "\t\t== Sparse Graph:\n\t\t>> Path: ";
+      //std::cout << sgraph << "\n";
+      
+      auto sStartTime = std::chrono::high_resolution_clock::now();
+      double sDist = aStar(sgraph, start, end, h);
+      auto sEndTime = std::chrono::high_resolution_clock::now();
+      auto sparseTime = std::chrono::duration_cast<std::chrono::milliseconds>(sEndTime - sStartTime).count();
+      
+      std::cout << "\n\t\t== Distance: " << sDist << "\n";
+      std::cout << "\t\t== Time: " << sparseTime << "ms\n";
+      std::cout << "\t\t== Dense Graph:\n\t\t==Path: ";
+      
+      auto dStartTime = std::chrono::high_resolution_clock::now();
+      double dDist = aStar(dgraph, start, end, h);
+      auto dEndTime = std::chrono::high_resolution_clock::now();
+      auto denseTime = std::chrono::duration_cast<std::chrono::milliseconds>(dEndTime - dStartTime).count();
+      
+      std::cout << "\n\t\t== Distance: " << dDist << "\n";
+      std::cout << "\t\t== Time: " << denseTime << "ms\n";
+      
+    }
   
   return 0;
 }
