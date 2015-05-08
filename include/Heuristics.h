@@ -24,8 +24,8 @@ int hManhattan(int start, int end, int width, int height) { //only to be used on
   return abs(endx - startx) + abs(endy - starty);
 }
 
-double hIncomingEdges(Graph &sg, int end) { //not sure exactly how well this will work with our weights and the fact that all our other heuristics so far return ints
-  Vertex *v = sg.find(end); //need sparse graph object for this to work, so I included the SparseGraph.h file. but not sure how exactly to get the right graph
+double hIncomingEdges(Graph &sg, int end) { //slow and inefficient, but correct, heuristic
+  Vertex *v = sg.find(end);
   std::list<Edge> inEdges = v->getInEdges();
   Edge min = inEdges.front();
   for(std::list<Edge>::iterator iter = inEdges.begin();
