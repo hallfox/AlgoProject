@@ -46,3 +46,8 @@ graphs: tests
 .PHONY: clean test
 
 again: clean $(TARGET)
+
+git: clean
+	git add -A
+	git commit -m "committing using makefile"
+	@echo "now type \"git push <branch>\""
