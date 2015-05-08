@@ -9,6 +9,8 @@
 #include <math.h>
 #include <list>
 static const int PLACEHOLDER = 0;
+
+#define WRITE_GARBAGE 1
 //static const double INFINITY = INFINITY; //std::numeric_limits<double>::infinity();
 //static const int MAX = std::numeric_limits<int>::max();
 using namespace std;
@@ -30,7 +32,13 @@ DenseGraph::~DenseGraph(){
 Vertex *DenseGraph::find(int val) {
   Vertex v = Vertex(val);
   Vertex *vert = &v;
-  std::cout << val << std::endl;
+  if(WRITE_GARBAGE) {
+    const char* fn = "garbage";
+    std::ofstream garbage(fn);
+    garbage << val << std::endl;
+    garbage.close();
+    remove(fn);
+  }
   //DEBUG
   for(int i = 0; i < numEdges; i++) {
     if(edges[i].end == val) {
